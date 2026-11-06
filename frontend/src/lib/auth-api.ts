@@ -10,8 +10,10 @@ import type {
   VerifyEmailResponse,
 } from './auth-types';
 
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
+const rawApiUrl = (process.env.NEXT_PUBLIC_API_URL || 'https://dzbookstore.onrender.com/api').trim();
+const API_BASE = rawApiUrl.replace(/\/+$/, '').endsWith('/api')
+  ? rawApiUrl.replace(/\/+$/, '')
+  : `${rawApiUrl.replace(/\/+$/, '')}/api`;
 
 const FIELD_LABELS: Record<string, string> = {
   email: 'Adresse email',

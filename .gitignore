@@ -19,6 +19,8 @@ staticfiles/
 # Environment
 .env
 .env*.local
+!frontend/.env
+!frontend/.env.production
 *.sqlite3
 renderdbinfos
 
