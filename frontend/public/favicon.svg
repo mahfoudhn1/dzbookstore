@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Rounded Tile in Deep Sea Blue -->
+  <rect width="64" height="64" rx="14" fill="#0E3444"/>
+  
+  <!-- Subtle Brass Border -->
+  <rect x="2.5" y="2.5" width="59" height="59" rx="11.5" stroke="#C9A063" stroke-width="1.5" stroke-opacity="0.4"/>
+  
+  <!-- Open Book in Ivory -->
+  <!-- Left Page -->
+  <path d="M12 21 C18 19 26 20.5 31 23.5 V46.5 C26 43.5 18 42 12 44 Z" fill="#F7F2E7"/>
+  <!-- Right Page -->
+  <path d="M52 21 C46 19 38 20.5 33 23.5 V46.5 C38 43.5 46 42 52 44 Z" fill="#F7F2E7"/>
+  
+  <!-- Page line accents -->
+  <path d="M16 26 C21 24.5 26 25.5 29 27.5 M16 31 C21 29.5 26 30.5 29 32.5 M16 36 C21 34.5 26 35.5 29 37.5" stroke="#0E3444" stroke-width="1.2" stroke-linecap="round" stroke-opacity="0.25"/>
+  <path d="M48 26 C43 24.5 38 25.5 35 27.5 M48 31 C43 29.5 38 30.5 35 32.5 M48 36 C43 34.5 38 35.5 35 37.5" stroke="#0E3444" stroke-width="1.2" stroke-linecap="round" stroke-opacity="0.25"/>
+
+  <!-- Book Spine Center Fold -->
+  <line x1="32" y1="23.5" x2="32" y2="47" stroke="#0E3444" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- 8-Pointed Algerian Zellige Star in Brass Gold at the top -->
+  <g transform="translate(32, 14)">
+    <path d="M0 -7.5 L2 -2.5 L7 -4.8 L4.8 0 L7.5 2 L2.5 4.8 L4.8 7 L0 4.8 L-4.8 7 L-2.5 4.8 L-7.5 2 L-4.8 0 L-7 -4.8 L-2 -2.5 Z" fill="#C9A063"/>
+    <circle cx="0" cy="0" r="1.5" fill="#C45A38"/>
+  </g>
+</svg>

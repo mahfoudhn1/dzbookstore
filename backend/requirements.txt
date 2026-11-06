@@ -1,0 +1,10 @@
+# BookstoreDZ backend — pinned to backend/venv (Python 3.10).
+asgiref==3.12.1
+Django==5.2.18
+django-cors-headers==4.9.0
+django-filter==26.1
+djangorestframework==3.18.3
+Pillow==12.3.0
+psycopg2-binary==2.9.13
+requests==2.34.2
+sqlparse==0.6.0

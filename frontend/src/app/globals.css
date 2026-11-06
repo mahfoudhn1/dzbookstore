@@ -1,0 +1,258 @@
+@import "tailwindcss";
+
+@theme {
+  /* ——— Maison palette ————————————————————————————————
+     Deep Mediterranean blue, warm ivory, terracotta,
+     muted emerald, sandstone and brass. */
+  --color-ivory: #f7f2e7;
+  --color-ivory-deep: #f1e9da;
+  --color-parchment: #fbf8f1;
+  --color-sand: #e3d3b8;
+  --color-sand-deep: #cdb895;
+  --color-clay: #b4512f;
+  --color-clay-deep: #93401f;
+  --color-terracotta: #b4512f;
+  --color-sea: #0e3444;
+  --color-sea-deep: #0a2632;
+  --color-sea-soft: #16485c;
+  --color-emerald-dz: #1f5745;
+  --color-emerald-deep: #163d33;
+  --color-brass: #b98a45;
+  --color-brass-light: #d0ac70;
+  --color-ink: #201e19;
+  --color-ink-soft: #3a362e;
+  --color-muted: #6d665a;
+  --color-line: #e2d6c1;
+  --color-line-dark: #cfc0a6;
+  --color-night: #141a1c;
+
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+
+  --shadow-card: 0 1px 0 rgba(32, 30, 25, 0.04), 0 18px 40px -30px rgba(14, 52, 68, 0.28);
+  --shadow-lift: 0 24px 60px -32px rgba(14, 52, 68, 0.45);
+  --shadow-cover: 8px 12px 30px -12px rgba(20, 26, 28, 0.5);
+
+  --tracking-label: 0.16em;
+}
+
+@theme inline {
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
+  --font-arabic: var(--font-amiri), "Noto Naskh Arabic", serif;
+  --font-kufi: var(--font-kufi), "Noto Kufi Arabic", sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ivory);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-sea);
+    color: var(--color-ivory);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-clay);
+    outline-offset: 3px;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  section[id] {
+    scroll-margin-top: 7.5rem;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    font: inherit;
+  }
+
+  /* Arabic text needs a little more room and a warmer rhythm */
+  [dir="rtl"],
+  .arabic {
+    font-family: var(--font-arabic);
+    line-height: 1.9;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tracking-label {
+    letter-spacing: var(--tracking-label);
+  }
+
+  /* ——— Zellige, drawn once and reused ————————————————
+     A khatam (eight-point star) lattice. Used as a mask so the
+     colour always comes from `currentColor` and never competes
+     with the content. */
+  .zellige-mask {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23fff' stroke-width='0.9'%3E%3Cpath d='M36 5.5 42.2 17.8 54.5 11.6 48.3 23.9 60.6 30.1 48.3 36.3 54.5 48.6 42.2 42.4 36 54.7 29.8 42.4 17.5 48.6 23.7 36.3 11.4 30.1 23.7 23.9 17.5 11.6 29.8 17.8Z'/%3E%3Cpath d='M36 19.2 46.8 30.1 36 41 25.2 30.1Z'/%3E%3Cpath d='M0 30.1 6 36.3 0 42.4M72 30.1 66 36.3 72 42.4M30.1 0 36.3 6 42.4 0M30.1 72 36.3 66 42.4 72'/%3E%3Ccircle cx='36' cy='30.1' r='1.4'/%3E%3C/g%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23fff' stroke-width='0.9'%3E%3Cpath d='M36 5.5 42.2 17.8 54.5 11.6 48.3 23.9 60.6 30.1 48.3 36.3 54.5 48.6 42.2 42.4 36 54.7 29.8 42.4 17.5 48.6 23.7 36.3 11.4 30.1 23.7 23.9 17.5 11.6 29.8 17.8Z'/%3E%3Cpath d='M36 19.2 46.8 30.1 36 41 25.2 30.1Z'/%3E%3Cpath d='M0 30.1 6 36.3 0 42.4M72 30.1 66 36.3 72 42.4M30.1 0 36.3 6 42.4 0M30.1 72 36.3 66 42.4 72'/%3E%3Ccircle cx='36' cy='30.1' r='1.4'/%3E%3C/g%3E%3C/svg%3E");
+    -webkit-mask-size: 72px 72px;
+    mask-size: 72px 72px;
+    -webkit-mask-repeat: repeat;
+    mask-repeat: repeat;
+    background-color: currentColor;
+  }
+
+  .zellige-mask-sm {
+    -webkit-mask-size: 44px 44px;
+    mask-size: 44px 44px;
+  }
+
+  /* A broad, quiet lattice for full-width bands */
+  .zellige-lattice {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='88' viewBox='0 0 88 88'%3E%3Cg fill='none' stroke='%23fff' stroke-width='0.8'%3E%3Cpath d='M44 4 52 20 68 12 60 28 76 36 60 44 68 60 52 52 44 68 36 52 20 60 28 44 12 36 28 28 20 12 36 20Z'/%3E%3Cpath d='M0 0 12 12M88 0 76 12M0 88 12 76M88 88 76 76'/%3E%3Crect x='37' y='29' width='14' height='14' transform='rotate(45 44 36)'/%3E%3C/g%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='88' viewBox='0 0 88 88'%3E%3Cg fill='none' stroke='%23fff' stroke-width='0.8'%3E%3Cpath d='M44 4 52 20 68 12 60 28 76 36 60 44 68 60 52 52 44 68 36 52 20 60 28 44 12 36 28 28 20 12 36 20Z'/%3E%3Cpath d='M0 0 12 12M88 0 76 12M0 88 12 76M88 88 76 76'/%3E%3Crect x='37' y='29' width='14' height='14' transform='rotate(45 44 36)'/%3E%3C/g%3E%3C/svg%3E");
+    -webkit-mask-size: 88px 88px;
+    mask-size: 88px 88px;
+    background-color: currentColor;
+  }
+
+  /* A tactile paper surface — almost invisible, never noisy */
+  .paper-grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+
+  .hairline {
+    border-color: color-mix(in srgb, var(--color-line) 82%, transparent);
+  }
+
+  .arch-clip {
+    clip-path: path(
+      "M0 1 L0 .42 C0 .18 .22 0 .5 0 C.78 0 1 .18 1 .42 L1 1 Z"
+    );
+    clip-path: url(#arch-clip);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-fade-up {
+    animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .delay-1 {
+    animation-delay: 0.1s;
+  }
+  .delay-2 {
+    animation-delay: 0.2s;
+  }
+  .delay-3 {
+    animation-delay: 0.32s;
+  }
+  .delay-4 {
+    animation-delay: 0.44s;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    100deg,
+    var(--color-ivory-deep) 20%,
+    #faf5ea 40%,
+    var(--color-ivory-deep) 60%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 2.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ——— Arabic / RTL ————————————————————————————————
+   Arabic uses Amiri for body copy and Kufi for small labels. Physical
+   alignment utilities are mirrored so the layout reads naturally from right
+   to left without rewriting every component. */
+html[lang='ar'] body {
+  font-family: var(--font-amiri), var(--font-manrope), sans-serif;
+}
+
+html[lang='ar'] .font-display {
+  font-family: var(--font-amiri), var(--font-fraunces), serif;
+}
+
+html[lang='ar'] .font-sans {
+  font-family: var(--font-arabic), var(--font-manrope), sans-serif;
+}
+
+[dir='rtl'] .text-left {
+  text-align: right;
+}
+
+[dir='rtl'] .text-right {
+  text-align: left;
+}
+
+[dir='rtl'] .origin-left {
+  transform-origin: right;
+}
+
+[dir='rtl'] .group-hover\:translate-x-0\.5:is(:where(.group):hover *) {
+  transform: translateX(-0.125rem);
+}
+
+[dir='rtl'] .group-hover\:translate-x-1:is(:where(.group):hover *) {
+  transform: translateX(-0.25rem);
+}
+
+[dir='rtl'] .group-hover\/button\:translate-x-0\.5:is(:where(.group\/button):hover *) {
+  transform: translateX(-0.125rem);
+}
+
+[dir='rtl'] .group-hover\/link\:translate-x-0\.5:is(:where(.group\/link):hover *) {
+  transform: translateX(-0.125rem);
+}
