@@ -25,6 +25,7 @@ def _load_env_file(path):
 
 
 _load_env_file(PROJECT_ROOT / '.env')
+_load_env_file(BASE_DIR / '.env')
 
 
 def env_bool(name, default=False):
@@ -105,15 +106,18 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 def _database_from_url(url):
     parsed = urlparse(url)
-    return {
+    db = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': (parsed.path or '').lstrip('/'),
         'USER': unquote(parsed.username or ''),
         'PASSWORD': unquote(parsed.password or ''),
         'HOST': parsed.hostname or '',
-        'PORT': str(parsed.port or ''),
+        'PORT': str(parsed.port or '5432'),
         'CONN_MAX_AGE': int(os.getenv('DB_CONN_MAX_AGE', '0')),
     }
+    if 'sslmode' in (parsed.query or '') or 'render.com' in (parsed.hostname or ''):
+        db['OPTIONS'] = {'sslmode': 'require'}
+    return db
 
 
 DATABASE_URL = os.getenv('DATABASE_URL', '').strip()
