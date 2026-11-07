@@ -27,13 +27,14 @@ import {
 } from '@/lib/store/authSlice';
 import { ROLE_LABEL, dashboardPathForRole } from '@/lib/auth-routes';
 import { useCart } from '@/lib/cart-context';
+import { fetchUnreadMessageCount } from '@/lib/api';
 import { useI18n } from '@/lib/i18n/I18nProvider';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Wordmark, BrandMark } from '@/components/Brand';
 import { SearchBar } from '@/components/SearchBar';
 import { MessagesLink } from '@/components/MessagesLink';
 import { NotificationsBell } from '@/components/NotificationsBell';
-import { cn } from '@/lib/utils';
+import { cn, initials } from '@/lib/utils';
 import { ZelligeStar } from '@/components/ui/Ornaments';
 
 const NAV = [
@@ -63,6 +64,20 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState(0);
+
+  // Unread badge for the drawer's messages tile. Only fetched while the drawer
+  // is open, so a closed menu costs nothing.
+  useEffect(() => {
+    if (!user || !menuOpen) return;
+    let active = true;
+    fetchUnreadMessageCount().then((value) => {
+      if (active) setUnreadMessages(value);
+    });
+    return () => {
+      active = false;
+    };
+  }, [user, menuOpen]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -100,6 +115,12 @@ export default function Navbar() {
   };
 
   const firstName = user?.first_name?.trim();
+  const displayName =
+    [user?.first_name, user?.last_name].filter(Boolean).join(' ').trim() ||
+    user?.username ||
+    firstName ||
+    t('Lecteur·rice');
+  const displayInitials = user ? initials(displayName) : '';
   const roleLabel = user ? t(ROLE_LABEL[user.role]) : t('Lecteur');
   const dashboardHref = user
     ? dashboardPathForRole(user.role, user.is_staff || user.is_superuser)
@@ -299,8 +320,6 @@ export default function Navbar() {
                   <Plus className="h-3.5 w-3.5" />
                   {t("Vendre")}{' '}</Link>
 
-                <LanguageSwitcher className="sm:hidden" compact />
-
                 <button
                   type="button"
                   onClick={() => setMenuOpen(true)}
@@ -372,6 +391,81 @@ export default function Navbar() {
 
             {/* Scrollable body */}
             <div className="flex-1 overflow-y-auto overscroll-contain">
+              {/* Signed-in account block — first thing in the drawer, because
+                  a logged-in reader opens this menu to reach their own space. */}
+              {user && (
+                <div className="border-b border-line bg-parchment/70 px-5 py-5">
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-brass/40 bg-sea font-display text-[13px] tracking-[0.02em] text-ivory">
+                      {user.avatar_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={user.avatar_url} alt="" className="h-full w-full object-cover" />
+                      ) : (
+                        displayInitials
+                      )}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-display text-[15px] leading-tight text-ink">
+                        {displayName}
+                      </p>
+                      <p className="mt-0.5 truncate text-[10.5px] text-muted">{user.email}</p>
+                    </div>
+                    <span className="shrink-0 border border-line bg-ivory px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-[0.1em] text-ink-soft">
+                      {roleLabel}
+                    </span>
+                  </div>
+
+                  {!user.email_verified && (
+                    <Link
+                      href="/verifier-email"
+                      onClick={() => setMenuOpen(false)}
+                      className="mt-3 flex items-center gap-2 border border-clay/30 bg-clay/[0.06] px-3 py-2 text-[10.5px] text-clay transition-colors hover:bg-clay/10"
+                    >
+                      <UserPlus className="h-3.5 w-3.5 shrink-0" />
+                      {t("Vérifier mon email")}
+                    </Link>
+                  )}
+
+                  <Link
+                    href={dashboardHref}
+                    onClick={() => setMenuOpen(false)}
+                    className="mt-3 flex h-10 items-center justify-between gap-2 bg-sea px-3.5 text-[9.5px] font-bold uppercase tracking-[0.12em] text-ivory transition-colors hover:bg-sea-deep"
+                  >
+                    <span className="flex items-center gap-2">
+                      <LayoutDashboard className="h-3.5 w-3.5" />
+                      {t("Mon espace")}
+                    </span>
+                    <ArrowRight className="h-3.5 w-3.5 rtl:rotate-180" />
+                  </Link>
+
+                  <div className="mt-2 grid grid-cols-2 gap-2">
+                    <Link
+                      href="/messages"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex h-10 items-center gap-2 border border-line bg-ivory px-3 text-[10.5px] text-ink-soft transition-colors hover:border-sea/40 hover:text-sea"
+                    >
+                      <MessageCircle className="h-3.5 w-3.5 shrink-0" />
+                      <span className="truncate">{t("Mes messages")}</span>
+                      {unreadMessages > 0 && (
+                        <span className="ms-auto flex h-4 min-w-4 shrink-0 items-center justify-center rounded-full bg-emerald-dz px-1 text-[8px] font-bold text-ivory">
+                          {unreadMessages > 9 ? '9+' : unreadMessages}
+                        </span>
+                      )}
+                    </Link>
+                    <Link
+                      href={user.bookstore_profile ? '/dashboard/library' : '/dashboard/library-setup'}
+                      onClick={() => setMenuOpen(false)}
+                      className="flex h-10 items-center gap-2 border border-line bg-ivory px-3 text-[10.5px] text-ink-soft transition-colors hover:border-sea/40 hover:text-sea"
+                    >
+                      <Store className="h-3.5 w-3.5 shrink-0" />
+                      <span className="truncate">
+                        {user.bookstore_profile ? t("Ma librairie") : t("Ouvrir une librairie")}
+                      </span>
+                    </Link>
+                  </div>
+                </div>
+              )}
+
               <div className="px-5 pt-5">
                 <SearchBar variant="compact" />
               </div>
@@ -447,63 +541,35 @@ export default function Navbar() {
                   </Link>
                 </div>
 
-                <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-2.5 pb-2 text-[11px] text-muted">
-                  {user ? (
-                    <>
-                      <button
-                        type="button"
-                        onClick={() => goToDashboard(dashboardHref)}
-                        className="flex items-center gap-2 text-start transition-colors hover:text-sea"
-                      >
-                        <LayoutDashboard className="h-3.5 w-3.5" />
-                        {t("Mon espace")}
-                      </button>
-                      <Link
-                        href="/messages"
-                        onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2 text-start transition-colors hover:text-sea"
-                      >
-                        <MessageCircle className="h-3.5 w-3.5" />
-                        {t("Mes messages")}
-                      </Link>
-                      <Link
-                        href={user.bookstore_profile ? '/dashboard/library' : '/dashboard/library-setup'}
-                        onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2 text-start transition-colors hover:text-sea"
-                      >
-                        <Store className="h-3.5 w-3.5" />
-                        {user.bookstore_profile ? t("Ma librairie") : t("Ouvrir une librairie")}
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={handleLogout}
-                        className="flex items-center gap-2 text-start transition-colors hover:text-clay"
-                      >
-                        <LogOut className="h-3.5 w-3.5" />
-                        {t("Se déconnecter")}
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <Link
-                        href="/connexion"
-                        onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2 text-start transition-colors hover:text-sea"
-                      >
-                        <User className="h-3.5 w-3.5" />
-                        {t("Se connecter")}
-                      </Link>
-                      <Link
-                        href="/inscription"
-                        onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2 text-start transition-colors hover:text-sea"
-                      >
-                        <UserPlus className="h-3.5 w-3.5" />
-                        {t("Créer un compte")}
-                      </Link>
-                    </>
-                  )}
-                </div>
+                {user ? (
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="mt-5 flex w-full items-center justify-center gap-2 border border-line/80 py-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted transition-colors hover:border-clay/40 hover:text-clay"
+                  >
+                    <LogOut className="h-3.5 w-3.5" />
+                    {t("Se déconnecter")}
+                  </button>
+                ) : (
+                  <div className="mt-5 grid grid-cols-2 gap-2">
+                    <Link
+                      href="/connexion"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex h-11 items-center justify-center gap-1.5 border border-line text-[9.5px] font-bold uppercase tracking-[0.12em] text-ink transition-colors hover:border-sea/40 hover:text-sea"
+                    >
+                      <User className="h-3.5 w-3.5" />
+                      {t("Se connecter")}
+                    </Link>
+                    <Link
+                      href="/inscription"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex h-11 items-center justify-center gap-1.5 border border-sea/25 text-[9.5px] font-bold uppercase tracking-[0.12em] text-sea transition-colors hover:border-sea hover:bg-sea/5"
+                    >
+                      <UserPlus className="h-3.5 w-3.5" />
+                      {t("Créer un compte")}
+                    </Link>
+                  </div>
+                )}
               </nav>
             </div>
 

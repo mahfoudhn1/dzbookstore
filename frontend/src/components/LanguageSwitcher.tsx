@@ -9,14 +9,12 @@ import { cn } from '@/lib/utils';
 export function LanguageSwitcher({
   className,
   placement = 'down',
-  compact = false,
   variant = 'menu',
 }: {
   className?: string;
   placement?: 'down' | 'up';
-  compact?: boolean;
   /**
-   * 'menu' is the popover used in the desktop header.
+   * 'menu' is the popover used in the desktop header and the footer.
    * 'segmented' is the three-up control used inside the mobile drawer, where
    * a popover would fight the drawer for the same layer.
    */
@@ -95,14 +93,11 @@ export function LanguageSwitcher({
         aria-haspopup="listbox"
         aria-expanded={open}
         className={cn(
-          'flex h-9 items-center gap-1.5 text-ink-soft transition-colors hover:text-clay',
-          compact ? 'w-9 justify-center' : 'px-1.5',
+          'flex h-9 items-center gap-1.5 px-1.5 text-ink-soft transition-colors hover:text-clay',
         )}
       >
         <Languages className="h-[17px] w-[17px]" />
-        {!compact && (
-          <span className="text-[9px] font-bold uppercase tracking-[0.1em]">{current.short}</span>
-        )}
+        <span className="text-[9px] font-bold uppercase tracking-[0.1em]">{current.short}</span>
       </button>
 
       {open && (
