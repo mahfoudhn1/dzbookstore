@@ -12,7 +12,7 @@ import {
   Truck,
 } from 'lucide-react';
 import type { Offer } from '@/lib/types';
-import { cn, conditionTone, formatPrice, getLocalizedCondition, getLocalizedFormat, getLocalizedWilaya, normalizeCondition } from '@/lib/utils';
+import { cn, conditionTone, formatPrice, getLocalizedCondition, getLocalizedFormat, getLocalizedWilaya, getMediaUrl, normalizeCondition } from '@/lib/utils';
 import { WILAYAS } from '@/lib/wilayas';
 import { AddToCartButton } from './AddToCartButton';
 import { ContactSellerButton } from '@/components/ContactSellerButton';
@@ -248,17 +248,20 @@ export function OfferComparison({ offers }: { offers: Offer[] }) {
                 {offer.photos?.length > 0 && (
                   <div className="mt-2 flex items-center gap-1.5">
                     <span className="text-[8px] uppercase tracking-[0.1em] text-muted/60">{t("Photos")}</span>
-                    {offer.photos.slice(0, 3).map((photo, index) => (
-                      <a
-                        key={`${photo}-${index}`}
-                        href={photo}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="h-7 w-7 overflow-hidden border border-line transition-transform hover:scale-105"
-                      >
-                        <img src={photo} alt={t("Photo de l’exemplaire")} className="h-full w-full object-cover" />
-                      </a>
-                    ))}
+                    {offer.photos.slice(0, 3).map((photo, index) => {
+                      const resolvedPhoto = getMediaUrl(photo);
+                      return (
+                        <a
+                          key={`${photo}-${index}`}
+                          href={resolvedPhoto}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="h-7 w-7 overflow-hidden border border-line transition-transform hover:scale-105"
+                        >
+                          <img src={resolvedPhoto} alt={t("Photo de l’exemplaire")} className="h-full w-full object-cover" />
+                        </a>
+                      );
+                    })}
                   </div>
                 )}
               </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { cn } from '@/lib/utils';
+import { cn, getMediaUrl } from '@/lib/utils';
 import { useI18n } from '@/lib/i18n/I18nProvider';
 import { ZelligeField, ZelligeStar } from '@/components/ui/Ornaments';
 
@@ -207,8 +207,9 @@ export function BookCover({
   eager?: boolean;
   photo?: boolean;
 }) {
+  const resolvedSrc = getMediaUrl(src);
   // Treat the seeded Unsplash placeholders as editorial placeholders, not covers.
-  const usePhoto = photo ?? Boolean(src && !src.includes('images.unsplash.com'));
+  const usePhoto = photo ?? Boolean(resolvedSrc && !resolvedSrc.includes('images.unsplash.com'));
 
   return (
     <figure
@@ -217,9 +218,9 @@ export function BookCover({
         className,
       )}
     >
-      {usePhoto && src ? (
+      {usePhoto && resolvedSrc ? (
         <img
-          src={src}
+          src={resolvedSrc}
           alt={`Couverture de ${title}`}
           loading={eager ? 'eager' : 'lazy'}
           className={cn(

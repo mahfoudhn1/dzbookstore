@@ -52,7 +52,7 @@ import type {
   Offer,
   Wilaya,
 } from '@/lib/types';
-import { formatPrice, getLocalizedCategory, getLocalizedWilaya, initials } from '@/lib/utils';
+import { formatPrice, getLocalizedCategory, getLocalizedWilaya, getMediaUrl, initials } from '@/lib/utils';
 import { useI18n } from '@/lib/i18n/I18nProvider';
 
 type StockFilter = 'ALL' | 'IN' | 'OUT';
@@ -563,7 +563,7 @@ export default function MyLibraryPage() {
                 {library.logo_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={library.logo_url}
+                    src={getMediaUrl(library.logo_url)}
                     alt={`Logo de ${library.store_name}`}
                     className="h-full w-full object-cover"
                   />

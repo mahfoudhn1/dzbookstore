@@ -161,9 +161,12 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Absolute origin used to build URLs for mirrored covers. Required when the
 # frontend is served from a different host than the API; leave empty for a
 # same-origin deployment.
-MEDIA_PUBLIC_BASE_URL = os.getenv(
-    'MEDIA_PUBLIC_BASE_URL', 'http://127.0.0.1:8000' if DEBUG else ''
-).rstrip('/')
+_default_media_base = (
+    f"https://{os.getenv('RENDER_EXTERNAL_HOSTNAME')}"
+    if os.getenv('RENDER_EXTERNAL_HOSTNAME')
+    else ('http://127.0.0.1:8000' if DEBUG else 'https://dzbookstore.onrender.com')
+)
+MEDIA_PUBLIC_BASE_URL = os.getenv('MEDIA_PUBLIC_BASE_URL', _default_media_base).rstrip('/')
 
 # Download provider cover art into MEDIA_ROOT/covers when cataloguing a book.
 MIRROR_REMOTE_COVERS = env_bool('MIRROR_REMOTE_COVERS', True)

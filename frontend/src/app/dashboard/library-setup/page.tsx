@@ -25,6 +25,7 @@ import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { bootstrapSession, selectUser } from '@/lib/store/authSlice';
 import type { Bookstore, Wilaya } from '@/lib/types';
 import { useI18n } from '@/lib/i18n/I18nProvider';
+import { getMediaUrl } from '@/lib/utils';
 
 interface LibraryForm {
   store_name: string;
@@ -326,7 +327,7 @@ export default function LibrarySetupPage() {
                   <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xs border border-line bg-ivory-deep/50">
                     {form.logo_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={form.logo_url} alt="" className="h-full w-full object-cover" />
+                      <img src={getMediaUrl(form.logo_url)} alt="" className="h-full w-full object-cover" />
                     ) : (
                       <ImageIcon className="h-6 w-6 text-muted/50" />
                     )}
@@ -356,7 +357,7 @@ export default function LibrarySetupPage() {
                   <div className="flex h-20 w-32 shrink-0 items-center justify-center overflow-hidden rounded-xs border border-line bg-ivory-deep/50">
                     {form.banner_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={form.banner_url} alt="" className="h-full w-full object-cover" />
+                      <img src={getMediaUrl(form.banner_url)} alt="" className="h-full w-full object-cover" />
                     ) : (
                       <ImageIcon className="h-6 w-6 text-muted/50" />
                     )}

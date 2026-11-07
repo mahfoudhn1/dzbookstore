@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { fetchAuthors, fetchBookstores, fetchCategories, fetchOffers, fetchWorks } from '@/lib/api';
 import type { Work } from '@/lib/types';
-import { authorNames, cn, dedupeWorks, formatNumber, formatPrice, getLocalizedCategory, getLocalizedCondition, getLocalizedWilaya, initials, normalizeCondition, pluralize } from '@/lib/utils';
+import { authorNames, cn, dedupeWorks, formatNumber, formatPrice, getLocalizedCategory, getLocalizedCondition, getLocalizedWilaya, getMediaUrl, initials, normalizeCondition, pluralize } from '@/lib/utils';
 import { SearchBar } from '@/components/SearchBar';
 import { BookCard } from '@/components/books/BookCard';
 import { BookCover } from '@/components/books/BookCover';
@@ -512,7 +512,7 @@ export default async function HomePage() {
                       padding="p-[2px]"
                     >
                       {store.logo_url && !store.logo_url.includes('images.unsplash.com') ? (
-                        <img src={store.logo_url} alt={`Logo de ${store.store_name}`} className="h-full w-full object-cover" />
+                        <img src={getMediaUrl(store.logo_url)} alt={`Logo de ${store.store_name}`} className="h-full w-full object-cover" />
                       ) : (
                         <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-sea-soft">
                           <ZelligeField className="text-brass" opacity={0.18} size="sm" />

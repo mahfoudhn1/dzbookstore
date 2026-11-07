@@ -13,7 +13,7 @@ import {
   Store,
 } from 'lucide-react';
 import { fetchLibraries } from '@/lib/api';
-import { getLocalizedWilaya, initials, pluralize } from '@/lib/utils';
+import { getLocalizedWilaya, getMediaUrl, initials, pluralize } from '@/lib/utils';
 import { MessageSellerButton } from '@/components/MessageSellerButton';
 import { WILAYAS } from '@/lib/wilayas';
 import {
@@ -207,7 +207,7 @@ export default async function BookstoresPage(props: {
                     <ZelligeField className="text-ivory" opacity={0.07} />
                     {store.banner_url && (
                       <img
-                        src={store.banner_url}
+                        src={getMediaUrl(store.banner_url)}
                         alt=""
                         className="absolute inset-0 h-full w-full object-cover opacity-30 transition-transform duration-700 group-hover:scale-105"
                       />
@@ -226,7 +226,7 @@ export default async function BookstoresPage(props: {
                     <div className="absolute -bottom-8 left-6">
                       <ArchFrame id={`store-card-${store.id}`} className="h-[92px] w-[76px]" padding="p-[3px]">
                         {store.logo_url && !store.logo_url.includes('images.unsplash.com') ? (
-                          <img src={store.logo_url} alt={`Logo de ${store.store_name}`} className="h-full w-full object-cover" />
+                          <img src={getMediaUrl(store.logo_url)} alt={`Logo de ${store.store_name}`} className="h-full w-full object-cover" />
                         ) : (
                           <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-sea-soft">
                             <ZelligeField className="text-brass" opacity={0.2} size="sm" />

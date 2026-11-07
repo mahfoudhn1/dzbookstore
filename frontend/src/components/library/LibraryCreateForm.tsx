@@ -12,7 +12,7 @@ import {
 import { createMyLibrary, uploadImage } from '@/lib/api';
 import type { Bookstore, Wilaya } from '@/lib/types';
 import { useI18n } from '@/lib/i18n/I18nProvider';
-import { getLocalizedWilaya } from '@/lib/utils';
+import { getLocalizedWilaya, getMediaUrl } from '@/lib/utils';
 import { ZelligeDivider, ZelligeStar } from '@/components/ui/Ornaments';
 
 interface Props {
@@ -237,7 +237,7 @@ export function LibraryCreateForm({ wilayas, onCreated }: Props) {
               <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden border border-line bg-parchment">
                 {form.logo_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={form.logo_url} alt="" className="h-full w-full object-cover" />
+                  <img src={getMediaUrl(form.logo_url)} alt="" className="h-full w-full object-cover" />
                 ) : (
                   <Store className="h-6 w-6 text-muted/50" />
                 )}

@@ -20,7 +20,7 @@ import {
   fetchCategories,
   fetchLibraryBooks,
 } from '@/lib/api';
-import { formatPrice, getLocalizedCategory, getLocalizedWilaya, initials, normalizeCondition, pluralize } from '@/lib/utils';
+import { formatPrice, getLocalizedCategory, getLocalizedWilaya, getMediaUrl, initials, normalizeCondition, pluralize } from '@/lib/utils';
 import { WILAYAS } from '@/lib/wilayas';
 import { BookCover } from '@/components/books/BookCover';
 import { AddToCartButton } from '@/components/books/AddToCartButton';
@@ -223,7 +223,7 @@ export default async function BookstoreDetailPage(props: {
         <ZelligeField className="text-ivory" opacity={0.06} />
         {store.banner_url && (
           <img
-            src={store.banner_url}
+            src={getMediaUrl(store.banner_url)}
             alt=""
             className="absolute inset-0 h-full w-full object-cover opacity-25"
           />
@@ -233,7 +233,7 @@ export default async function BookstoreDetailPage(props: {
           <div className="flex flex-col gap-8 sm:flex-row sm:items-end">
             <ArchFrame id="store-hero-arch" className="h-[132px] w-[108px] shrink-0" padding="p-[3px]">
               {store.logo_url && !store.logo_url.includes('images.unsplash.com') ? (
-                <img src={store.logo_url} alt={`Logo de ${store.store_name}`} className="h-full w-full object-cover" />
+                <img src={getMediaUrl(store.logo_url)} alt={`Logo de ${store.store_name}`} className="h-full w-full object-cover" />
               ) : (
                 <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-sea-soft">
                   <ZelligeField className="text-brass" opacity={0.2} size="sm" />

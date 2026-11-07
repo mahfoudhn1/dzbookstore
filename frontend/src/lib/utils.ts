@@ -241,3 +241,31 @@ export function monthYear(date?: string) {
   if (!date) return '';
   return new Intl.DateTimeFormat('fr-DZ', { month: 'long', year: 'numeric' }).format(new Date(date));
 }
+
+/**
+ * Resolves any media or image URL to the backend media folder.
+ * If the URL has '127.0.0.1:8000' or 'localhost:8000', or starts with '/media/',
+ * it converts it to the backend media URL (e.g. 'https://dzbookstore.onrender.com/media/...').
+ */
+export function getMediaUrl(url?: string | null): string {
+  if (!url) return '';
+  const trimmed = url.trim();
+  if (!trimmed) return '';
+
+  const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'https://dzbookstore.onrender.com/api').trim();
+  const backendBase = apiBase.replace(/\/api\/?$/, '').replace(/\/+$/, '');
+
+  // 1. If it's a relative media path like '/media/covers/...'
+  if (trimmed.startsWith('/media/')) {
+    return `${backendBase}${trimmed}`;
+  }
+
+  // 2. If it has localhost or 127.0.0.1 (e.g. 'http://127.0.0.1:8000/media/...')
+  if (trimmed.includes('127.0.0.1:8000') || trimmed.includes('localhost:8000')) {
+    return trimmed.replace(/^https?:\/\/(?:127\.0\.0\.1|localhost):8000/, backendBase);
+  }
+
+  // 3. Otherwise return as-is
+  return trimmed;
+}
+

@@ -48,7 +48,8 @@ def upload_image_view(request):
         )
 
     relative_url = f"/media/covers/{filename}"
-    absolute_url = request.build_absolute_uri(relative_url)
+    base = (getattr(settings, 'MEDIA_PUBLIC_BASE_URL', '') or '').rstrip('/')
+    absolute_url = f"{base}{relative_url}" if base else request.build_absolute_uri(relative_url)
 
     return Response({
         'success': True,

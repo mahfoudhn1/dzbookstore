@@ -33,7 +33,7 @@ import { Category, MetadataSearchResult, Wilaya } from '@/lib/types';
 import { useI18n } from '@/lib/i18n/I18nProvider';
 import { useAppSelector } from '@/lib/store/hooks';
 import { selectAuthInitialized, selectUser } from '@/lib/store/authSlice';
-import { getLocalizedCategory, getLocalizedWilaya } from '@/lib/utils';
+import { getLocalizedCategory, getLocalizedWilaya, getMediaUrl } from '@/lib/utils';
 
 const LANGUAGE_OPTIONS = [
   { value: 'ARABIC', label: 'Arabe' },
@@ -554,7 +554,7 @@ function SellPageContent() {
           {createdOffer.cover_image && (
             <div className="flex justify-center">
               <img
-                src={createdOffer.cover_image}
+                src={getMediaUrl(createdOffer.cover_image)}
                 alt={createdOffer.work_title || bookTitle}
                 className="h-40 w-28 object-cover rounded-xs border border-line shadow-sm"
               />
@@ -746,7 +746,7 @@ function SellPageContent() {
                           >
                             {record.cover_image ? (
                               <img
-                                src={record.cover_image}
+                                src={getMediaUrl(record.cover_image)}
                                 alt=""
                                 className="h-14 w-10 shrink-0 rounded-xs border border-line object-cover"
                               />
@@ -782,7 +782,7 @@ function SellPageContent() {
                   <div className="flex items-start gap-4 rounded-sm border border-emerald-200 bg-emerald-50 p-4">
                     {selectedBook.cover_image ? (
                       <img
-                        src={selectedBook.cover_image}
+                        src={getMediaUrl(selectedBook.cover_image)}
                         alt={selectedBook.title}
                         className="h-20 w-14 shrink-0 rounded-xs border border-emerald-200 object-cover"
                       />
@@ -994,7 +994,7 @@ function SellPageContent() {
                         {coverImage ? (
                           <div className="relative group w-28 h-36 rounded-sm border border-line bg-parchment overflow-hidden shadow-xs">
                             <img
-                              src={coverImage}
+                              src={getMediaUrl(coverImage)}
                               alt={bookTitle || 'Couverture'}
                               className="w-full h-full object-cover"
                             />

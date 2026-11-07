@@ -13,6 +13,7 @@ import {
 import { Offer } from '@/lib/types';
 import { BookCover } from '@/components/books/BookCover';
 import { useI18n } from '@/lib/i18n/I18nProvider';
+import { getMediaUrl } from '@/lib/utils';
 import {
   BookCopy, PlusCircle, CheckCircle, Clock, Star,
   AlertCircle, Camera, ShieldAlert, Sparkles, MapPin, Tag, RefreshCw,
@@ -439,7 +440,7 @@ export default function IndividualSellerDashboardPage() {
                   {form.photos ? (
                     <div className="relative w-24 h-32 rounded-xl border border-[#e2d6c1] overflow-hidden shrink-0 shadow-2xs">
                       <img
-                        src={form.photos}
+                        src={getMediaUrl(form.photos)}
                         alt="Aperçu du livre"
                         className="w-full h-full object-cover"
                       />
