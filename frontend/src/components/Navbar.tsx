@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
+  ArrowRight,
   ChevronDown,
   LayoutDashboard,
   LogOut,
@@ -32,7 +33,6 @@ import { Wordmark, BrandMark } from '@/components/Brand';
 import { SearchBar } from '@/components/SearchBar';
 import { MessagesLink } from '@/components/MessagesLink';
 import { NotificationsBell } from '@/components/NotificationsBell';
-import { WILAYAS } from '@/lib/wilayas';
 import { cn } from '@/lib/utils';
 import { ZelligeStar } from '@/components/ui/Ornaments';
 
@@ -42,6 +42,14 @@ const NAV = [
   { href: '/secondhand', label: 'Occasion' },
   { href: '/#auteurs', label: 'Auteurs' },
   { href: '/#nouveautes', label: 'Nouveautés' },
+];
+
+const SECTIONS: [string, string][] = [
+  ['Littérature algérienne', 'litterature-algerienne'],
+  ['Histoire & Révolution', 'histoire-et-revolution'],
+  ['Pensée & Philosophie', 'pensee-et-philosophie'],
+  ['Romans & Fictions', 'romans-et-fictions'],
+  ['Scolaire & Universitaire', 'scolaire-universitaire'],
 ];
 
 export default function Navbar() {
@@ -148,7 +156,7 @@ export default function Navbar() {
                 ))}
               </nav>
 
-              <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
+              <div className="ms-auto flex items-center gap-1.5 sm:gap-2">
                 <SearchBar variant="compact" className="hidden w-[220px] xl:block" />
 
                 <button
@@ -190,7 +198,7 @@ export default function Navbar() {
                             onClick={() => setAccountOpen(false)}
                             className="fixed inset-0 z-40 cursor-default bg-sea-deep/10"
                           />
-                          <div className="absolute right-0 top-[calc(100%+14px)] z-50 w-[288px] border border-line bg-parchment p-2 shadow-[0_30px_70px_-30px_rgba(10,38,50,0.45)]">
+                          <div className="absolute end-0 top-[calc(100%+14px)] z-50 w-[288px] border border-line bg-parchment p-2 shadow-[0_30px_70px_-30px_rgba(10,38,50,0.45)]">
                             <div className="border-b border-line/80 px-3 py-2.5">
                               <p className="text-[9px] uppercase tracking-label text-muted">{t("Connecté comme")}</p>
                               <p className="mt-1 font-display text-lg leading-none text-ink">
@@ -286,7 +294,7 @@ export default function Navbar() {
 
                 <Link
                   href="/sell"
-                  className="ml-1 hidden h-9 items-center gap-1.5 bg-clay px-4 text-[9.5px] font-bold uppercase tracking-[0.12em] text-ivory transition-colors hover:bg-clay-deep sm:flex"
+                  className="ms-1 hidden h-9 items-center gap-1.5 bg-clay px-4 text-[9.5px] font-bold uppercase tracking-[0.12em] text-ivory transition-colors hover:bg-clay-deep sm:flex"
                 >
                   <Plus className="h-3.5 w-3.5" />
                   {t("Vendre")}{' '}</Link>
@@ -298,7 +306,7 @@ export default function Navbar() {
                   onClick={() => setMenuOpen(true)}
                   aria-label={t("Ouvrir le menu")}
                   aria-expanded={menuOpen}
-                  className="ml-0.5 flex h-9 w-9 items-center justify-center text-ink lg:hidden"
+                  className="ms-0.5 flex h-9 w-9 items-center justify-center text-ink transition-colors hover:text-clay lg:hidden"
                 >
                   <Menu className="h-5 w-5" />
                 </button>
@@ -306,29 +314,44 @@ export default function Navbar() {
             </div>
 
             {/* Mobile search stays visible: search is the primary gesture. */}
-            <div className={cn('pb-3 lg:hidden', !mobileSearchOpen && 'hidden sm:block')}>
-              <SearchBar variant="compact" />
+            <div className="pb-3 lg:hidden">
+              {mobileSearchOpen ? (
+                <SearchBar
+                  variant="large"
+                  suggestions={[
+                    { label: t('Kateb Yacine'), href: '/recherche?q=Kateb%20Yacine' },
+                    { label: t('Littérature algérienne'), href: '/recherche?category=litterature-algerienne' },
+                    { label: t('Occasion'), href: '/secondhand' },
+                  ]}
+                />
+              ) : (
+                <SearchBar variant="compact" />
+              )}
             </div>
-            {mobileSearchOpen && (
-              <div className="pb-4 lg:hidden">
-                <SearchBar variant="large" suggestions={[
-                  { label: 'Kateb Yacine', href: '/recherche?q=Kateb%20Yacine' },
-                  { label: 'Littérature algérienne', href: '/recherche?category=litterature-algerienne' },
-                  { label: 'Occasion', href: '/secondhand' },
-                ]} />
-              </div>
-            )}
           </div>
         </div>
       </header>
 
       {/* Mobile / tablet drawer */}
       {menuOpen && (
-        <div className="fixed inset-0 z-[70] lg:hidden" role="dialog" aria-modal="true" aria-label={t("Menu principal")}>
-          <div className="absolute inset-0 bg-sea-deep/45 backdrop-blur-sm" onClick={() => setMenuOpen(false)} />
-          <div className="absolute inset-y-0 right-0 flex w-full max-w-[420px] flex-col overflow-y-auto bg-ivory shadow-2xl">
-            <div className="flex items-center justify-between border-b border-line px-5 py-4">
-              <div className="flex items-center gap-2.5">
+        <div
+          className="fixed inset-0 z-[70] lg:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label={t("Menu principal")}
+        >
+          <div
+            className="absolute inset-0 animate-drawer-fade bg-sea-deep/45 backdrop-blur-sm"
+            onClick={() => setMenuOpen(false)}
+          />
+          <div className="absolute inset-y-0 end-0 flex w-full max-w-[420px] animate-drawer-panel flex-col bg-ivory shadow-[0_0_80px_-20px_rgba(10,38,50,0.6)]">
+            {/* Header — pinned so the close control is always reachable */}
+            <div className="flex shrink-0 items-center justify-between border-b border-line px-5 py-4">
+              <Link
+                href="/"
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center gap-2.5"
+              >
                 <BrandMark className="h-9 w-9 text-sea" />
                 <div>
                   <p className="font-display text-lg leading-none text-ink">{t("Bookstore.dz")}</p>
@@ -336,132 +359,165 @@ export default function Navbar() {
                     المكتبة المفتوحة
                   </p>
                 </div>
-              </div>
+              </Link>
               <button
                 type="button"
                 onClick={() => setMenuOpen(false)}
                 aria-label={t("Fermer le menu")}
-                className="flex h-9 w-9 items-center justify-center border border-line text-ink"
+                className="flex h-9 w-9 items-center justify-center border border-line text-ink transition-colors hover:border-clay hover:text-clay"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="px-5 py-5">
-              <SearchBar
-                variant="compact"
-                suggestions={undefined}
-              />
+            {/* Scrollable body */}
+            <div className="flex-1 overflow-y-auto overscroll-contain">
+              <div className="px-5 pt-5">
+                <SearchBar variant="compact" />
+              </div>
+
+              <nav className="px-5 pb-8 pt-6" aria-label={t("Navigation mobile")}>
+                <p className="mb-3 text-[9px] font-semibold uppercase tracking-label text-muted">
+                  {t("Explorer")}
+                </p>
+                <ul className="border-t border-line/80">
+                  {NAV.map((item, index) => (
+                    <li key={item.href} className="border-b border-line/80">
+                      <Link
+                        href={item.href}
+                        onClick={() => setMenuOpen(false)}
+                        className="group flex items-center justify-between gap-3 py-4"
+                      >
+                        <span className="flex items-baseline gap-4">
+                          <span className="font-display text-[11px] text-brass">
+                            {String(index + 1).padStart(2, '0')}
+                          </span>
+                          <span className="font-display text-[1.55rem] leading-none tracking-[-0.02em] text-ink transition-colors group-hover:text-sea">
+                            {t(item.label)}
+                          </span>
+                        </span>
+                        <ArrowRight className="h-4 w-4 shrink-0 text-clay/70 transition-transform group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+
+                <p className="mb-3 mt-8 text-[9px] font-semibold uppercase tracking-label text-muted">
+                  {t("Rayons")}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {SECTIONS.map(([label, slug]) => (
+                    <Link
+                      key={slug}
+                      href={`/recherche?category=${slug}`}
+                      onClick={() => setMenuOpen(false)}
+                      className="border border-line px-3 py-2 text-[10.5px] text-ink-soft transition-colors hover:border-sea/40 hover:text-sea"
+                    >
+                      {t(label)}
+                    </Link>
+                  ))}
+                </div>
+
+                <p className="mb-3 mt-8 text-[9px] font-semibold uppercase tracking-label text-muted">
+                  {t("Langue")}
+                </p>
+                <LanguageSwitcher variant="segmented" />
+
+                <div className="mt-8 grid grid-cols-2 gap-2 border-t border-line/80 pt-6">
+                  <Link
+                    href="/sell"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex h-11 items-center justify-center gap-1.5 bg-clay text-[9.5px] font-bold uppercase tracking-[0.12em] text-ivory transition-colors hover:bg-clay-deep"
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                    {t("Vendre un livre")}
+                  </Link>
+                  <Link
+                    href="/cart"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex h-11 items-center justify-center gap-1.5 border border-line text-[9.5px] font-bold uppercase tracking-[0.12em] text-ink transition-colors hover:border-sea/40 hover:text-sea"
+                  >
+                    <ShoppingBag className="h-3.5 w-3.5" />
+                    {t("Panier")}
+                    {count > 0 && (
+                      <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-clay px-1 text-[8px] font-bold text-ivory">
+                        {count}
+                      </span>
+                    )}
+                  </Link>
+                </div>
+
+                <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-2.5 pb-2 text-[11px] text-muted">
+                  {user ? (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => goToDashboard(dashboardHref)}
+                        className="flex items-center gap-2 text-start transition-colors hover:text-sea"
+                      >
+                        <LayoutDashboard className="h-3.5 w-3.5" />
+                        {t("Mon espace")}
+                      </button>
+                      <Link
+                        href="/messages"
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center gap-2 text-start transition-colors hover:text-sea"
+                      >
+                        <MessageCircle className="h-3.5 w-3.5" />
+                        {t("Mes messages")}
+                      </Link>
+                      <Link
+                        href={user.bookstore_profile ? '/dashboard/library' : '/dashboard/library-setup'}
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center gap-2 text-start transition-colors hover:text-sea"
+                      >
+                        <Store className="h-3.5 w-3.5" />
+                        {user.bookstore_profile ? t("Ma librairie") : t("Ouvrir une librairie")}
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 text-start transition-colors hover:text-clay"
+                      >
+                        <LogOut className="h-3.5 w-3.5" />
+                        {t("Se déconnecter")}
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href="/connexion"
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center gap-2 text-start transition-colors hover:text-sea"
+                      >
+                        <User className="h-3.5 w-3.5" />
+                        {t("Se connecter")}
+                      </Link>
+                      <Link
+                        href="/inscription"
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center gap-2 text-start transition-colors hover:text-sea"
+                      >
+                        <UserPlus className="h-3.5 w-3.5" />
+                        {t("Créer un compte")}
+                      </Link>
+                    </>
+                  )}
+                </div>
+              </nav>
             </div>
 
-            <nav className="flex-1 px-5" aria-label={t("Navigation mobile")}>
-              <p className="mb-3 text-[9px] font-semibold uppercase tracking-label text-muted">{t("Explorer")}</p>
-              <ul className="border-t border-line/80">
-                {NAV.map((item, index) => (
-                  <li key={item.href} className="border-b border-line/80">
-                    <Link
-                      href={item.href}
-                      onClick={() => setMenuOpen(false)}
-                      className="group flex items-center justify-between py-4"
-                    >
-                      <span className="flex items-baseline gap-4">
-                        <span className="font-display text-[11px] text-brass">0{index + 1}</span>
-                        <span className="font-display text-[1.7rem] leading-none tracking-[-0.02em] text-ink group-hover:text-sea">
-                          {item.label}
-                        </span>
-                      </span>
-                      <span className="text-clay">→</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-
-              <p className="mb-3 mt-8 text-[9px] font-semibold uppercase tracking-label text-muted">{t("Rayons")}</p>
-              <div className="flex flex-wrap gap-2">
-                {[
-                  ['Littérature algérienne', 'litterature-algerienne'],
-                  ['Histoire & Révolution', 'histoire-et-revolution'],
-                  ['Pensée & Philosophie', 'pensee-et-philosophie'],
-                  ['Romans & Fictions', 'romans-et-fictions'],
-                  ['Scolaire & Universitaire', 'scolaire-universitaire'],
-                ].map(([label, slug]) => (
-                  <Link
-                    key={slug}
-                    href={`/recherche?category=${slug}`}
-                    onClick={() => setMenuOpen(false)}
-                    className="border border-line px-3 py-2 text-[10.5px] text-ink-soft transition-colors hover:border-sea/40 hover:text-sea"
-                  >
-                    {label}
-                  </Link>
-                ))}
-              </div>
-
-              <div className="mt-8 grid grid-cols-2 gap-2 border-t border-line/80 pt-6">
-                <Link
-                  href="/sell"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex h-11 items-center justify-center bg-clay text-[9.5px] font-bold uppercase tracking-[0.12em] text-ivory"
-                >
-                  {t("Vendre un livre")}{' '}</Link>
-                <Link
-                  href="/cart"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex h-11 items-center justify-center border border-line text-[9.5px] font-bold uppercase tracking-[0.12em] text-ink"
-                >
-                  {t("Panier")} ({count})
-                </Link>
-              </div>
-
-              <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-2 pb-8 text-[11px] text-muted">
-                {user ? (
-                  <>
-                    <button
-                      type="button"
-                      onClick={() => goToDashboard(dashboardHref)}
-                      className="text-left hover:text-sea"
-                    >
-                      {t("Mon espace")}{' '}</button>
-                    <Link
-                      href="/messages"
-                      onClick={() => setMenuOpen(false)}
-                      className="text-left hover:text-sea"
-                    >
-                      {t("Mes messages")}{' '}</Link>
-                    <button
-                      type="button"
-                      onClick={handleLogout}
-                      className="text-left hover:text-sea"
-                    >
-                      {t("Se déconnecter")}{' '}</button>
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      href="/connexion"
-                      onClick={() => setMenuOpen(false)}
-                      className="text-left hover:text-sea"
-                    >
-                      {t("Se connecter")}{' '}</Link>
-                    <Link
-                      href="/inscription"
-                      onClick={() => setMenuOpen(false)}
-                      className="text-left hover:text-sea"
-                    >
-                      {t("Créer un compte")}{' '}</Link>
-                  </>
-                )}
-              </div>
-            </nav>
-
-            <div className="border-t border-line bg-sea px-5 py-4 text-ivory">
-              <div className="flex items-center justify-between">
+            {/* Footer band — pinned */}
+            <div className="shrink-0 border-t border-line bg-sea px-5 py-4 text-ivory">
+              <div className="flex items-center justify-between gap-3">
                 <span className="flex items-center gap-2 font-kufi text-[10px] tracking-[0.08em]" dir="rtl">
                   <ZelligeStar className="h-3.5 w-3.5 text-brass-light" />
                   الجزائر تقرأ
                 </span>
                 <span className="flex items-center gap-1.5 text-[9px] uppercase tracking-[0.12em] text-ivory/55">
                   <MapPin className="h-3 w-3 text-brass-light" />
-                  {t("58 wilayas")}{' '}</span>
+                  {t("58 wilayas")}
+                </span>
               </div>
             </div>
           </div>

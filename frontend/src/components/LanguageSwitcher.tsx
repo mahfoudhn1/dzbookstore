@@ -10,10 +10,17 @@ export function LanguageSwitcher({
   className,
   placement = 'down',
   compact = false,
+  variant = 'menu',
 }: {
   className?: string;
   placement?: 'down' | 'up';
   compact?: boolean;
+  /**
+   * 'menu' is the popover used in the desktop header.
+   * 'segmented' is the three-up control used inside the mobile drawer, where
+   * a popover would fight the drawer for the same layer.
+   */
+  variant?: 'menu' | 'segmented';
 }) {
   const { locale, setLocale, t } = useI18n();
   const [open, setOpen] = useState(false);
@@ -45,6 +52,40 @@ export function LanguageSwitcher({
     setOpen(false);
   };
 
+  if (variant === 'segmented') {
+    return (
+      <div
+        role="group"
+        aria-label={t('Langue de l’interface')}
+        className={cn('grid grid-cols-3 border border-line', className)}
+      >
+        {LOCALES.map((item) => {
+          const meta = LOCALE_META[item];
+          const active = item === locale;
+          return (
+            <button
+              key={item}
+              type="button"
+              onClick={() => choose(item)}
+              aria-pressed={active}
+              lang={meta.htmlLang}
+              className={cn(
+                'flex h-11 items-center justify-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.1em] transition-colors',
+                'border-e border-line last:border-e-0',
+                active
+                  ? 'bg-sea text-ivory'
+                  : 'text-ink-soft hover:bg-ivory-deep hover:text-sea',
+              )}
+            >
+              <span aria-hidden="true">{meta.short}</span>
+              <span className="sr-only">{meta.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
     <div ref={rootRef} className={cn('relative', className)}>
       <button
@@ -71,7 +112,7 @@ export function LanguageSwitcher({
           className={cn(
             'absolute z-[90] w-48 border border-line bg-parchment p-1 shadow-[0_24px_60px_-28px_rgba(10,38,50,0.5)]',
             placement === 'up' ? 'bottom-[calc(100%+12px)]' : 'top-[calc(100%+12px)]',
-            'right-0',
+            'end-0',
           )}
         >
           {LOCALES.map((item) => {

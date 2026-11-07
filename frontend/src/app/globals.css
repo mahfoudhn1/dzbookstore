@@ -157,6 +157,18 @@
   .animate-fade-up {
     animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
+
+  /* Drawer motion — the same easing curve as fade-up, so the chrome
+     and the page share one sense of movement. */
+  .animate-drawer-fade {
+    animation: drawer-fade 0.22s ease-out both;
+  }
+  .animate-drawer-panel {
+    animation: drawer-slide 0.34s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  [dir='rtl'] .animate-drawer-panel {
+    animation-name: drawer-slide-rtl;
+  }
   .delay-1 {
     animation-delay: 0.1s;
   }
@@ -179,6 +191,33 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes drawer-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes drawer-slide {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes drawer-slide-rtl {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
   }
 }
 
